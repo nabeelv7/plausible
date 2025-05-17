@@ -61,3 +61,33 @@ const getTime = () => {
   const unixTime = Math.floor(Date.now() / 1000);
   return unixTime;
 };
+
+// compile all the data into one object
+const compileData = async () => {
+  if (!sessionStorage.getItem("hasVisited")) {
+    sessionStorage.setItem("hasVisited", "true");
+
+    const domain = getDomain();
+    const location = await getLocation();
+    const referrer = getReferrer();
+    const device = getDevice();
+    const browser = getBrowser();
+    const os = getOS();
+    const time = getTime();
+
+    const data = {
+      domain,
+      location,
+      referrer,
+      device,
+      browser,
+      os,
+      time,
+    };
+
+    console.log(data);
+    return data;
+  } else {
+    return null;
+  }
+};
