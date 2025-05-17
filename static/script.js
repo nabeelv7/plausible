@@ -58,6 +58,6 @@ const getOS = () => {
 
 // get the current time
 const getTime = () => {
-  const time = new Date();
-  return time;
+  const unixTime = Math.floor(Date.now() / 1000);
+  return unixTime;
 };
