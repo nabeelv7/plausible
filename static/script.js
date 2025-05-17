@@ -1,3 +1,6 @@
+// initialize the bowser instance
+const browser = bowser.getParser(window.navigator.userAgent);
+
 // get the current domain from the <script data-domain=""> that the user has put in their website
 const getDomain = () => {
   const currentScript = document.currentScript;
@@ -37,25 +40,19 @@ const getReferrer = () => {
 
 // get the device of the visitor on the user's site
 const getDevice = () => {
-  const width = window.innerWidth;
-  if (width <= 768) {
-    return "mobile";
-  } else if (width <= 1024) {
-    return "tablet";
-  } else {
-    return "desktop";
-  }
+  const device = browser.getPlatformType();
+  console.log(device);
 };
 
 // get the browser of the visitor on the user's site
 const getBrowser = () => {
-  const browser = navigator.userAgent;
-  return browser;
+  const browserName = browser.getBrowserName();
+  return browserName;
 };
 
 // get the OS of the visitor on the user's site
 const getOS = () => {
-  const os = navigator.userAgent;
+  const os = browser.getOSName();
   return os;
 };
 
