@@ -41,7 +41,7 @@ const getReferrer = () => {
 // get the device of the visitor on the user's site
 const getDevice = () => {
   const device = browser.getPlatformType();
-  console.log(device);
+  return device;
 };
 
 // get the browser of the visitor on the user's site
@@ -64,30 +64,54 @@ const getTime = () => {
 
 // compile all the data into one object
 const compileData = async () => {
-  if (!sessionStorage.getItem("hasVisited")) {
-    sessionStorage.setItem("hasVisited", "true");
+  try {
+    if (!sessionStorage.getItem("hasVisited")) {
+      sessionStorage.setItem("hasVisited", "true");
 
-    const domain = getDomain();
-    const location = await getLocation();
-    const referrer = getReferrer();
-    const device = getDevice();
-    const browser = getBrowser();
-    const os = getOS();
-    const time = getTime();
+      const domain = getDomain();
+      const location = await getLocation();
+      const referrer = getReferrer();
+      const device = getDevice();
+      const browser = getBrowser();
+      const os = getOS();
+      const time = getTime();
 
-    const data = {
-      domain,
-      location,
-      referrer,
-      device,
-      browser,
-      os,
-      time,
-    };
+      const data = {
+        domain,
+        location,
+        referrer,
+        device,
+        browser,
+        os,
+        time,
+      };
 
-    console.log(data);
-    return data;
-  } else {
+      return data;
+    } else {
+      return null;
+    }
+  } catch (error) {
     return null;
   }
 };
+
+// send the data to my server
+const sendData = async () => {
+  const data = await compileData();
+  try {
+    if (data) {
+      const response = await fetch("/api/visit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    }
+  } catch (error) {
+    console.log("Error sending data to thandata server! 😭");
+  }
+};
+
+// run the whole script 🎉
+sendData();
